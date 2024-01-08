@@ -4,6 +4,8 @@ from DoubleQ import *
 
 if __name__ == "__main__":
     pygame.display.set_caption("N-step Q Learning AI - Snake")
+
+
 class NStepQLearningSnake(Snake):
     def __init__(self, learning_rate, discount_factor, N=3):
         super().__init__(INITIAL_POSITION, INITIAL_VELOCITY)
@@ -57,7 +59,7 @@ class NStepQLearningSnake(Snake):
             # Update the Q-value of the state-action pair
             q_value = self.q_table[state_f.state_representation()][action_f]
             self.q_table[state_f.state_representation()][action_f] = q_value + self.learning_rate * (
-                        n_step_return - q_value)
+                    n_step_return - q_value)
             # Update the N-step return
             n_step_return = n_step_return - reward
             n_step_return = n_step_return / self.discount_factor
@@ -70,9 +72,9 @@ class NStepQLearningSnake(Snake):
         snakeCopy.move()
         # Create a state representing next game state
         if self.position[0] == state.food_pos[0] and self.position[1] == state.food_pos[1]:
-            next_state = NStepSnakeGameState(snakeCopy,(0,0))
+            next_state = NStepSnakeGameState(snakeCopy, (0, 0))
         else:
-            next_state = NStepSnakeGameState(snakeCopy,state.food_pos)
+            next_state = NStepSnakeGameState(snakeCopy, state.food_pos)
         # Choose the best action to take in the next state according to the two Q-tables
         next_action = snakeCopy.get_greedy_action(next_state)
         return next_state, next_action
@@ -83,6 +85,7 @@ class NStepQLearningSnake(Snake):
         self.body = [self.position]
         self.direction = INITIAL_VELOCITY
 
+
 class NStepSnakeGameState(SnakeGameState):
     def __init__(self, snake: Snake, food_position):
         self.snake_pos = snake.position  # position of the snake's head
@@ -90,7 +93,8 @@ class NStepSnakeGameState(SnakeGameState):
         self.food_pos = food_position  # position of the food
         self.obstacles = snake.body  # positions of snake's body
 
+
 if __name__ == "__main__":
-    nStepSnake = NStepQLearningSnake(ALPHA,GAMMA)
+    nStepSnake = NStepQLearningSnake(ALPHA, GAMMA)
     snakeGame = SnakeGame(nStepSnake)
     snakeGame.run()
